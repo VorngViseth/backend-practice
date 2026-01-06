@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const DerLgSchema = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
-  tittle: { type: String, required: true },
-  description: { type: String, required: true },
+  id: { type: Number, requiredd: true, unique: true },
+  title: { type: String, requiredd: true },
+  description: { type: String, requiredd: true },
 });
 
 DerLgSchema.set("toJSON", {

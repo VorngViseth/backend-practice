@@ -1,9 +1,9 @@
 const express = require("express");
-const router = express.Router();
+const route = express.Router();
 const DerLg = require("../models/DerLg");
 
 // GET all DerLg
-router.get("/", async(req, res) => {
+route.get("/", async(req, res) => {
     try {
         const derlgData = await DerLg.find();
         res.status(201).json({
@@ -18,21 +18,45 @@ router.get("/", async(req, res) => {
         });
     }
 });
-
-// POST DerLg
-router.post("/", async(req, res) => {
+// GET DerLg by id
+route.get("/:id", async(req, res) => {
     try {
-        const { tittle, description } = req.body;
+        const { id } = req.params;
+        const derlgData = await DerLg.findOne({ id: Number(id) });
 
-        //if input is nothing
-        if(!tittle || !description) 
+        // return if cant find any post with that id
+        if(!derlgData)
             return res.status(404).json({
                 success: false,
-                message: "tittle and description are required"
+                message: `Place with the id : ${id} doesn't exist in the database`
+            });
+
+        res.status(201).json({
+            success: true,
+            data: derlgData
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+// POST DerLg
+route.post("/", async(req, res) => {
+    try {
+        const { title, description } = req.body;
+
+        //if input is nothing
+        if(!title || !description) 
+            return res.status(404).json({
+                success: false,
+                message: "title and description are required"
             });
 
         // if input is the same as existing data
-        const existing = await DerLg.findOne({ tittle: {$regex: `^${tittle}$`, $options: "i"} });
+        const existing = await DerLg.findOne({ title: {$regex: `^${title}$`, $options: "i"} });
         if(existing) 
             return res.status(404).json({
                 success: false,
@@ -47,7 +71,7 @@ router.post("/", async(req, res) => {
         //create a new item
         const newDerLg = new DerLg({
             id: newId,
-            tittle,
+            title,
             description
         });
 
@@ -67,9 +91,9 @@ router.post("/", async(req, res) => {
 });
 
 // DELETE Derlg
-router.delete("/", async(req, res) => {
+route.delete("/:id", async(req, res) => {
     try {
-        const { id } = req.body;
+        const { id } = req.params;
         
         // return if nothing 
         if(!id) 
@@ -89,10 +113,10 @@ router.delete("/", async(req, res) => {
 
         res.status(201).json({
             success: true,
-            message: `Place's name: ${deletePlace.tittle} with the id:${id} has been deleted form the database`,
+            message: `Place's name: ${deletePlace.title} with the id:${id} has been deleted form the database`,
             data: {
                 id: deletePlace.id,
-                tittle: deletePlace.tittle,
+                title: deletePlace.title,
                 description: deletePlace.description
             }
         });        
@@ -106,8 +130,8 @@ router.delete("/", async(req, res) => {
 });
 
 //UPDATE DerLg
-// router.patch("/:id", (req, res) => {
+// route.patch("/:id", (req, res) => {
 
 // });
 
-module.exports = router;
+module.exports = route;
