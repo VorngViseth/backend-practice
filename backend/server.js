@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 
 const app = express();
@@ -15,10 +16,18 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.error("MongoDB error:", err));
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 // ------------------ APIs ------------------
 
 // images
-app.use("/uploads", express.static("./src/uploads"));
+// app.use("/uploads", express.static("./src/uploads"));
+
+
 
 // DerLg
 const derlgRouter = require("./src/routes/derlg.route.js");

@@ -133,7 +133,7 @@
                 <input type="text" id="userId" name="userId" required>
             </div>
             <div class="form-group">
-                <button type="submit">Create Community</button>
+                <button type="submit" id="submitBtn">Create Community</button>
             </div>
         </form>
     </div>
@@ -157,9 +157,11 @@ async function init() {
 
 init();
 
-
 document.getElementById('communityForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const originalBtnText = submitBtn.innerText;
     
     const title = document.getElementById('title').value.trim();
     const description = document.getElementById('description').value.trim();
@@ -170,6 +172,12 @@ document.getElementById('communityForm').addEventListener('submit', async (e) =>
         alert('Please fill in all required fields.');
         return;
     }
+    
+    // Disable button and change text
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'Uploading to Cloudinary...';
+    submitBtn.style.opacity = '0.5';
+    submitBtn.style.cursor = 'not-allowed';
     
     const formData = new FormData();
     formData.append('title', title);
@@ -193,13 +201,18 @@ document.getElementById('communityForm').addEventListener('submit', async (e) =>
         if (response.ok) {
             alert('Community created successfully!');
             document.getElementById('communityForm').reset();
-            await loadCommunity(true);
+            await loadCommunity();
         } else {
             alert(`Error: ${result.message}`);
         }
     } catch (error) {
         console.error(`Error: ${error.message}`);
         alert('Failed to connect to server.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = originalBtnText;
+        submitBtn.style.opacity = '1';
+        submitBtn.style.cursor = 'pointer';
     }
 });
 
@@ -221,7 +234,7 @@ async function loadCommunity() {
 
         let newCards = ''; 
         result.data.forEach(c => {
-            const imageHTML = c.image ? `<img src="${API_BASE_URL}${c.image}" alt="${c.title}">` : '';
+            const imageHTML = (c.image && c.image.url) ? `<img src="${c.image.url}" alt="${c.title}">` : '';
             newCards += `
                 <div class="community-card">
                     ${imageHTML}

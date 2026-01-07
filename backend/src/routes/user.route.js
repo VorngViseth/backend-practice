@@ -2,8 +2,7 @@ const express = require("express");
 const route = express.Router();
 const User = require("../models/Users");
 const Community = require("../models/Community");
-const fs = require("fs").promises;
-const path = require("path");
+const cloudinary = require("cloudinary").v2;
 
 //GET all user
 route.get("/", async(req, res) => {
@@ -102,6 +101,7 @@ route.post("/", async(req, res) => {
         });
     }
 });
+
 // //DELETE user
 route.delete("/:id", async(req, res) => {
     try {
@@ -123,14 +123,13 @@ route.delete("/:id", async(req, res) => {
                 message: `There is no user with this id: ${id}` 
             });
 
-        await User.findOneAndDelete({id: Number(id)});
+        await User.deleteOne({id: Number(id)});
         
         const posts = await Community.find({"user.userId": deletedUser.id});
         for (const post of posts) {
-            if (post.image) {
+            if (post.image && post.image.publicId) {
                 try {
-                    const imagePath = path.join(__dirname, "..", post.image);
-                    await fs.unlink(imagePath);
+                    await cloudinary.uploader.destroy(post.image.publicId);
                 } catch (err) {
                     console.error(`Failed to delete image: ${post.image}`);
                 }
