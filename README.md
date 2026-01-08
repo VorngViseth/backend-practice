@@ -7,6 +7,7 @@
 ## tech stack 
 
 <p align="center">
+  <img src="https://img.shields.io/badge/Cloudinary-%233448C5.svg?style=for-the-badge&logo=Cloudinary&logoColor=white"/>
   <img src="https://img.shields.io/badge/mongodb-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white"/>
   <img src="https://img.shields.io/badge/postman-%23FF6C37.svg?style=for-the-badge&logo=postman&logoColor=white"/>
   <img src="https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB"/>

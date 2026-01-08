@@ -1,0 +1,24 @@
+{
+  "name": "tvna",
+  "version": "1.0.0",
+  "description": "<p align=\"center\">     <strong>This is a repo that i use to practice my backend skill. <br/></strong> </p>",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "install-all": "npm install && npm install --prefix frontend && npm install --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VorngViseth/backend-practice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VorngViseth/backend-practice/issues"
+  },
+  "homepage": "https://github.com/VorngViseth/backend-practice#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
