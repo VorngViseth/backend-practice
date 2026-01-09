@@ -1,21 +1,63 @@
 import '../css/index.css';
 import Addplace from '../components/Addplace';
+import { useEffect, useState } from 'react';
+import Card from '../components/CommunityCard.jsx';
+
+const API_BASE_URL = location.hostname === "localhost" || location.hostname === "127.0.0.1"
+    ? "http://localhost:3000"
+    : "https://api.yourdomain.com";
+
 
 function Community() {
+  const [open, setOpen] = useState(false);
+  const [communities, setCommunities] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    setLoading(true);
+
+    async function fetchCommunities() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/community`);
+        const result = await res.json();
+
+        if (res.ok) {
+          setCommunities(result.data || []); 
+        } else {
+          setError(result.message || 'Failed to load communities.');
+        }
+      } catch (err) {
+        setError('Failed to load communities.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCommunities();
+  }, []);
+
+
   return (
     <section className="w-full">
-        <main className='w-full md:max-w-4xl md:mx-auto'>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-10">DerLgJmuyKnea</h1>        
-            <div>
-                <article id="cardContainer" ></article>
-            </div>
+        <main className='w-full md:max-w-275 md:mx-auto flex flex-col items-center px-4 py-4 md:py-8'>
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-10">DerLgJmuyKnea</h1>        
+            <article className="w-fit mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {loading && <p className="text-gray-500">Loading...</p>}
+              {error && <p className="text-red-500">{error}</p>}
+
+              {communities.map((community) => (
+                <Card key={community.id} card={community} />
+              ))}
+            </article>
         </main>
 
-        <button id="addplaceBtn" className="fixed bottom-6 right-6 z-50">
-            ADD PLACE
+        <button id="addplaceBtn" className="fixed bottom-6 right-6 z-50" 
+          onClick={() => setOpen(true)}
+        >ADD PLACE
         </button>
 
-        <div id="addplaceModal" className='w-full bg-white rounded-lg shadow-lg' ><Addplace /></div>
+        {open && <Addplace onClose={() => setOpen(false)} className="transition-transform duration-300" />}
     </section>
   );
 }
