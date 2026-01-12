@@ -2,12 +2,16 @@ import '../css/index.css';
 
 function Addplace({onClose}) {
     return (
-        <div className="w-full fixed inset-0 z-50 bg-white rounded-lg shadow-lg flex items-center justify-center">
+        <div className="w-full fixed inset-0 z-50 bg-(--signinbg) rounded-lg shadow-lg flex items-center justify-center">
             <div className="w-full md:max-w-4xl md:mx-auto">
-                <div className="bg-white rounded-lg shadow-lg p-6">
-                    <span className="material-icons cursor-pointer absolute right-4 top-4" 
+                <div className="bg-white rounded-lg shadow-lg p-6 relative">
+                    <button 
+                        type="button"
                         onClick={onClose}
-                    >close</span>
+                        className="absolute right-4 top-4 flex items-center justify-center cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition"
+                    >
+                        <span className="material-symbols-outlined">close</span>
+                    </button>
                     <h2 className="text-3xl font-bold text-gray-800 mb-8">Create New Community</h2>
 
                     <form id="communityForm" className="space-y-6">

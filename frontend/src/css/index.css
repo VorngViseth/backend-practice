@@ -1,1 +1,41 @@
 @import "tailwindcss";
+/* 
+* {
+    @apply transition-colors duration-500;
+} */
+
+@theme {
+    --bg: var(--background);
+    --text: var(--text);
+    --muted: var(--muted);
+    --max-width: 1100px;
+    --indigo: #741EFF;
+    --bg-footer: var(--bg-footer);
+    --hover-btn: oklch(60.6% 0.25 292.717);
+    --hover-text: oklch(58.5% 0.233 277.117);
+    --shadow: 0 5px 5px rgba(0,0,0,0.15);
+    --signinbg: var(--signinbg);
+    --bg-input: var(--bg-input);
+}
+
+:root {
+    --background: #F9FAFB;
+    --text: #080069;
+    --bg-footer: oklch(93% 0.034 272.788);
+    --card-bg: white;
+    --card-desc: #374151;
+    --signinbg: #F9FAFB;
+    --muted: oklch(68% 0.018 260);
+    --bg-input: oklch(96.7% 0.003 264.542);
+}
+
+.dark {
+    --background: #121212;
+    --text: white;
+    --bg-footer: #171717;
+    --card-bg: #262626;
+    --card-desc: #d1d5db;
+    --signinbg: oklch(27.8% 0.033 256.848);
+    --muted: oklch(62% 0.020 260);
+    --bg-input: oklch(37.3% 0.034 259.733);
+}

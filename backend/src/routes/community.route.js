@@ -62,6 +62,32 @@ route.get("/:id", async(req, res) => {
     }
 });
 
+// GET all post vai userid
+route.get(`/user/:userId`, async(req, res) => {
+    try {
+        const { userId } = req.params;
+        const communityData = await Community.find({ "user.userId": Number(userId) });
+
+        // return if cant find any post with that userid
+        if(communityData.length === 0)
+            return res.status(404).json({
+                success: false,
+                message: `No posts found for user ID : ${userId}`
+            });
+
+        res.status(200).json({
+            success: true,
+            total: communityData.length,
+            data: communityData
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
 // POST Community
 route.post("/", upload.single("image"), async (req, res) => {
 

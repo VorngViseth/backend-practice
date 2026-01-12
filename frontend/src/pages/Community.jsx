@@ -39,15 +39,17 @@ function Community() {
 
 
   return (
-    <section className="w-full">
-        <main className='w-full md:max-w-275 md:mx-auto flex flex-col items-center px-4 py-4 md:py-8'>
+    <section className="w-full bg-(--bg) text-(--text) min-h-screen">
+        <main className='w-full md:max-w-275 md:mx-auto flex flex-col items-center px-8 py-4 md:py-8'>
             <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-10">DerLgJmuyKnea</h1>        
+            {loading && <p className="text-gray-500">Loading...</p>}
+            {error && <p className="text-red-500">{error}</p>}
             <article className="w-fit mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {loading && <p className="text-gray-500">Loading...</p>}
-              {error && <p className="text-red-500">{error}</p>}
-
               {communities.map((community) => (
-                <Card key={community.id} card={community} />
+                <Card key={community.id} card={community}  onUserClick={(user) => {
+                  setUserPf(user);
+                  setShowProfile(true);
+                }} />
               ))}
             </article>
         </main>
@@ -56,7 +58,6 @@ function Community() {
           onClick={() => setOpen(true)}
         >ADD PLACE
         </button>
-
         {open && <Addplace onClose={() => setOpen(false)} className="transition-transform duration-300" />}
     </section>
   );
