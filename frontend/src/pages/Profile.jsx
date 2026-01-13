@@ -10,6 +10,7 @@ const API_BASE_URL =
 function Profile() {
   const { userId } = useParams();
   const [userPosts, setUserPosts] = useState([]);
+  const [ userInfo, setUserInfo ] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -19,19 +20,24 @@ function Profile() {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(
-          `${API_BASE_URL}/api/community/user/${userId}`
-        );
-        const result = await res.json();
+        const [ userRes, postsRes ] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/users/${userId}`),
+          fetch(`${API_BASE_URL}/api/community/user/${userId}`)
+        ]);
 
-        if (!res.ok) {
-          throw new Error(result.message || "Failed to load user posts");
+        const userResult = await userRes.json();
+        const postsResult = await postsRes.json();
+
+        if (!postsRes.ok) {
+          throw new Error(postsResult.message || "Failed to load user posts");
         }
-
-        setUserPosts(result.data || []);
+        
+        setUserPosts(postsResult.data || []);
+        setUserInfo(userResult.data || null);
       } catch (err) {
         setError(err.message);
         setUserPosts([]);
+        setUserInfo(null);
       } finally {
         setLoading(false);
       }
@@ -43,7 +49,8 @@ function Profile() {
   return (
     <section>
       <h1 className="text-4xl font-bold mb-6">
-        User Profile {userId}
+        {userInfo ? userInfo.name : "User Profile"}
+        
       </h1>
 
       {loading && <p className="text-gray-500">Loading...</p>}

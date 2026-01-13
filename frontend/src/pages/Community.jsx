@@ -58,7 +58,10 @@ function Community() {
           onClick={() => setOpen(true)}
         >ADD PLACE
         </button>
-        {open && <Addplace onClose={() => setOpen(false)} className="transition-transform duration-300" />}
+        {open && <Addplace onClose={(newCommunity) => {
+          setCommunities((prev) => [newCommunity, ...prev]);
+          setOpen(false);
+        }} className="transition-transform duration-300" />}
     </section>
   );
 }

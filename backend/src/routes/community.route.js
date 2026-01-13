@@ -23,12 +23,12 @@ const upload = multer({ storage: storage });
 // GET all Community
 route.get("/", async(req, res) => {
     try {
-        const communityData = await Community.find()
-        res.status(200).json({
-            success: true,
-            total: communityData.length,
-            data: communityData
-        })
+        const communityData = await Community.find().sort({ id: -1 })
+            res.status(200).json({
+                success: true,
+                total: communityData.length,
+                data: communityData
+            })
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -66,7 +66,7 @@ route.get("/:id", async(req, res) => {
 route.get(`/user/:userId`, async(req, res) => {
     try {
         const { userId } = req.params;
-        const communityData = await Community.find({ "user.userId": Number(userId) });
+        const communityData = await Community.find({ "user.userId": Number(userId) }).sort({ id: -1 });
 
         // return if cant find any post with that userid
         if(communityData.length === 0)

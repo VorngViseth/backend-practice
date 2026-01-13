@@ -16,12 +16,14 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        select: false
     }
 });
 
 UserSchema.set("toJSON", {
     transform: (doc, ret) => {
+        delete ret.password;
         delete ret.__v;
         delete ret._id;
         return ret;
